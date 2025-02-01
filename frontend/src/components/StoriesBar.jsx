@@ -15,8 +15,11 @@ const StoriesBar = () => {
     getStories();
   }, [getStories]);
 
-  const myStories = stories.filter(story => story.userId._id === authUser._id);
-  const otherStories = stories.filter(story => story.userId._id !== authUser._id);
+  // Add null checks for story filtering
+  const myStories = stories?.filter(story => story?.userId?._id === authUser?._id) || [];
+  const otherStories = stories?.filter(story => story?.userId?._id !== authUser?._id) || [];
+
+  if (!authUser) return null;
 
   return (
     <>
@@ -48,8 +51,8 @@ const StoriesBar = () => {
               <div className="relative">
                 <div className="w-[60px] h-[60px] rounded-full bg-base-200 border-2 border-primary overflow-hidden">
                   <img
-                    src={story.userId.profilePic || "/avatar.png"}
-                    alt={story.userId.fullName}
+                    src={story.userId?.profilePic || "/avatar.png"}
+                    alt={story.userId?.fullName}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute bottom-1 left-1 bg-black/50 rounded-full p-1">
@@ -57,7 +60,7 @@ const StoriesBar = () => {
                   </div>
                 </div>
                 <span className="absolute -bottom-6 text-xs text-center w-full">
-                  {story.views.length} views
+                  {story.viewers?.length || 0} views
                 </span>
               </div>
               <span className="text-xs mt-2">Your Story</span>
@@ -77,14 +80,14 @@ const StoriesBar = () => {
               <div className="relative">
                 <div className="w-[60px] h-[60px] rounded-full bg-base-200 border-2 border-primary overflow-hidden">
                   <img
-                    src={story.userId.profilePic || "/avatar.png"}
-                    alt={story.userId.fullName}
+                    src={story.userId?.profilePic || "/avatar.png"}
+                    alt={story.userId?.fullName}
                     className="w-full h-full object-cover"
                   />
                 </div>
               </div>
               <span className="text-xs truncate w-full text-center">
-                {story.userId.fullName}
+                {story.userId?.fullName}
               </span>
             </button>
           ))}
@@ -97,7 +100,7 @@ const StoriesBar = () => {
           story={selectedStory}
           onClose={() => setSelectedStory(null)}
           onDelete={deleteStory}
-          isOwnStory={selectedStory.userId._id === authUser._id}
+          isOwnStory={selectedStory.userId?._id === authUser?._id}
         />
       )}
 

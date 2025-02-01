@@ -51,21 +51,19 @@ export const deleteStory = async (req, res) => {
       const story = await Story.findById(storyId);
       if (!story) return res.status(404).json({ error: "Story not found" });
   
-      const alreadyViewed = story.views.some(
-        (view) => view.userId.toString() === userId.toString()
-      );
+      const alreadyViewed = story.viewers.includes(userId);
   
       if (!alreadyViewed) {
-        story.views.push({ userId });
+        story.viewers.push(userId);
         await story.save();
       }
   
-      await story.populate([
-        { path: "userId", select: "fullName profilePic" },
-        { path: "views.userId", select: "fullName profilePic" }
-      ]);
+      const viewCount = story.viewers.length;
+      const populatedStory = await Story.findById(storyId)
+        .populate("viewers", "fullName profilePic")
+        .populate("userId", "fullName profilePic");
   
-      res.status(200).json(story);
+      res.status(200).json({ story: populatedStory, viewCount });
     } catch (error) {
       console.log("Error in viewStory:", error.message);
       res.status(500).json({ error: "Internal server error" });
@@ -78,6 +76,7 @@ export const deleteStory = async (req, res) => {
         createdAt: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
       })
         .populate("userId", "fullName profilePic")
+        .populate("viewers", "fullName profilePic") 
         .populate("views.userId", "fullName profilePic")
         .sort({ createdAt: -1 });
   
