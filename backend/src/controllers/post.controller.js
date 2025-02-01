@@ -1,6 +1,8 @@
 import Post from "../models/post.model.js";
 import cloudinary from "../lib/cloudinary.js";
 
+import { uploadImage } from "../lib/cloudinary.js";
+
 export const createPost = async (req, res) => {
   try {
     const { content, image } = req.body;
@@ -8,8 +10,7 @@ export const createPost = async (req, res) => {
 
     let imageUrl;
     if (image) {
-      const uploadResponse = await cloudinary.uploader.upload(image);
-      imageUrl = uploadResponse.secure_url;
+      imageUrl = await uploadImage(image);
     }
 
     const newPost = new Post({
@@ -23,11 +24,10 @@ export const createPost = async (req, res) => {
 
     res.status(201).json(newPost);
   } catch (error) {
-    console.log("Error in createPost:", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Error in createPost:", error);
+    res.status(500).json({ error: error.message || "Internal server error" });
   }
 };
-
 export const getPosts = async (req, res) => {
   try {
     const posts = await Post.find()

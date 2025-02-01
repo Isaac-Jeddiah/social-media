@@ -33,14 +33,20 @@ const CreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!content.trim() && !imagePreview) return;
-
+  
     try {
-      await createPost({ content: content.trim(), image: imagePreview });
+      const postData = {
+        content: content.trim(),
+        image: imagePreview
+      };
+      
+      await createPost(postData);
       setContent("");
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error creating post:", error);
+      toast.error(error?.response?.data?.error || "Failed to create post");
     }
   };
 

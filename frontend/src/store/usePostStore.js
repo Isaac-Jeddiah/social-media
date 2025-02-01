@@ -8,10 +8,14 @@ export const usePostStore = create((set, get) => ({
   createPost: async (data) => {
     try {
       const res = await axiosInstance.post("/posts/create", data);
-      set({ posts: [res.data, ...get().posts] });
-      toast.success("Post created successfully");
+      if (res.data) {
+        set({ posts: [res.data, ...get().posts] });
+        toast.success("Post created successfully");
+      }
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error("Error creating post:", error);
+      toast.error(error?.response?.data?.message || "Error creating post");
+      throw error;
     }
   },
   getPosts: async () => {

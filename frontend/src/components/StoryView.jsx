@@ -14,9 +14,9 @@ const StoryView = ({ story, onClose, onDelete, isOwnStory }) => {
 
   return (
     <div className="fixed inset-0 bg-base-300/80 z-50 flex items-center justify-center p-4">
-      <div className="bg-base-100 rounded-xl w-full max-w-4xl h-[80vh] relative flex">
+      <div className="bg-base-100 rounded-xl w-full max-w-4xl h-[80vh] relative">
         {/* Story Content */}
-        <div className="w-full lg:w-2/3 h-full">
+        <div className="h-full">
           <div className={`h-full ${story.background} rounded-xl p-6 flex items-center justify-center relative`}>
             <p className={`text-center ${story.textColor} ${story.fontSize}`}>
               {story.content}
@@ -27,13 +27,13 @@ const StoryView = ({ story, onClose, onDelete, isOwnStory }) => {
                 className="absolute bottom-4 left-4 flex items-center gap-2 bg-black/50 rounded-full px-3 py-1 hover:bg-black/70"
               >
                 <Eye className="w-4 h-4 text-white/75" />
-                <span className="text-white/75 text-sm">{story.viewers?.length} views</span>
+                <span className="text-white/75 text-sm">{story.viewers?.length || 0} views</span>
               </button>
             )}
           </div>
         </div>
 
-        {/* Viewers List - Only visible for story owner */}
+        {/* Viewer List Drawer */}
         {showViewers && isOwnStory && (
           <div className="fixed inset-x-0 bottom-0 bg-base-100 rounded-t-xl shadow-lg transition-transform duration-300 transform h-1/2">
             <div className="p-4">
@@ -48,14 +48,22 @@ const StoryView = ({ story, onClose, onDelete, isOwnStory }) => {
               </div>
               <div className="overflow-y-auto max-h-[calc(50vh-8rem)]">
                 {story.viewers?.map((viewer) => (
-                  <div key={viewer._id} className="flex items-center gap-3 py-2">
+                  <div 
+                    // Use viewer._id + timestamp to ensure uniqueness
+                    key={`${viewer._id}-${new Date(viewer.viewedAt).getTime()}`} 
+                    className="flex items-center gap-3 py-2"
+                  >
                     <img
                       src={viewer.profilePic || "/avatar.png"}
                       alt={viewer.fullName}
                       className="w-10 h-10 rounded-full object-cover"
                     />
-                    {console.log(viewer)}
-                    <div className="font-medium">{viewer.fullName}</div>
+                    <div>
+                      <div className="font-medium">{viewer.fullName}</div>
+                      <div className="text-xs text-base-content/60">
+                        {}
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

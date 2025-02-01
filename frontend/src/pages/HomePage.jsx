@@ -21,9 +21,14 @@ const HomePage = () => {
   }
 
   return (
+    
+    
     <div className="min-h-screen bg-base-200 pt-20">
+      <div className="fixed top-16 left-0 right-0 bg-base-200 z-30 px-4 py-2">
+        <StoriesBar />
+      </div>
       <div className="max-w-2xl mx-auto py-8 px-4">
-      <StoriesBar />
+        
           <div className="max-w-2xl mx-auto space-y-6">
           <CreatePost />
           {posts.map((post) => (
@@ -32,6 +37,7 @@ const HomePage = () => {
         </div>
       </div>
     </div>
+    
   );
 };
 
