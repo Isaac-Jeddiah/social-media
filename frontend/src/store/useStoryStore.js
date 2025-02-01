@@ -27,4 +27,27 @@ export const useStoryStore = create((set, get) => ({
       set({ isLoading: false });
     }
   },
+
+
+deleteStory: async (storyId) => {
+    try {
+      await axiosInstance.delete(`/stories/${storyId}`);
+      set({ stories: get().stories.filter(story => story._id !== storyId) });
+      toast.success("Story deleted successfully");
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
+
+  viewStory: async (storyId) => {
+    try {
+      const res = await axiosInstance.post(`/stories/${storyId}/view`);
+      const updatedStories = get().stories.map(story => 
+        story._id === storyId ? res.data : story
+      );
+      set({ stories: updatedStories });
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  }
 }));

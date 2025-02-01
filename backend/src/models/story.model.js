@@ -23,12 +23,20 @@ const storySchema = new mongoose.Schema(
       type: String,
       default: "text-xl",
     },
+    views: [{
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+      viewedAt: {
+        type: Date,
+        default: Date.now
+      }
+    }]
   },
   { timestamps: true }
 );
 
-// Stories expire after 24 hours
 storySchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
-
 const Story = mongoose.model("Story", storySchema);
 export default Story;

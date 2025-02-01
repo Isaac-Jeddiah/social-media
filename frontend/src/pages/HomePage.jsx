@@ -24,7 +24,7 @@ const HomePage = () => {
     <div className="min-h-screen bg-base-200 pt-20">
       <div className="max-w-2xl mx-auto py-8 px-4">
       <StoriesBar />
-        <div className="space-y-6">
+          <div className="max-w-2xl mx-auto space-y-6">
           <CreatePost />
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
