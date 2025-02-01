@@ -3,50 +3,32 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
 
-export const signup = async (req, res) => {
-  const { fullName, email, password } = req.body;
+export const signup = async (userData) => {
   try {
-    if (!fullName || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({ message: "Password must be at least 6 characters" });
-    }
-
-    const user = await User.findOne({ email });
-
-    if (user) return res.status(400).json({ message: "Email already exists" });
-
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User({
-      fullName,
-      email,
-      password: hashedPassword,
+    console.log("Signup request received:", userData);
+    
+    const user = await User.create({
+      ...userData,
+      password: await bcrypt.hash(userData.password, 10)
     });
 
-    if (newUser) {
-      // generate jwt token here
-      generateToken(newUser._id, res);
-      await newUser.save();
+    const token = generateToken(user._id);
+    console.log("User created, token generated");
 
-      res.status(201).json({
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        profilePic: newUser.profilePic,
-      });
-    } else {
-      res.status(400).json({ message: "Invalid user data" });
-    }
+    return { 
+      user: { 
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        profilePic: user.profilePic 
+      }, 
+      token 
+    };
   } catch (error) {
-    console.log("Error in signup controller", error.message);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Signup controller error:", error);
+    throw error;
   }
 };
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
