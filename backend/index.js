@@ -62,8 +62,7 @@ import messageRoutes from "./routes/message.route.js";
 import postRoutes from "./routes/post.route.js";
 import storyRoutes from "./routes/story.route.js";
 
-dotenv.config();
-
+console.log("this page running?");
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
