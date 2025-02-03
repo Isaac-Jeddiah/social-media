@@ -69,10 +69,10 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(cors({
   origin: [process.env.FRONTEND_URL,"https://kalakapu.vercel.app"],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-  exposedHeaders: ['Set-Cookie']
+  // credentials: true,
+  // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  // allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  // exposedHeaders: ['Set-Cookie']
 }));
 
 app.use(cookieParser());
