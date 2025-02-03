@@ -36,4 +36,8 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-export default app;
+
+// ... (rest of the code remains the same)
+
+// Export the Express.js app as a serverless function
+module.exports = app;
