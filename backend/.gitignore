@@ -5,7 +5,7 @@ node_modules/
 .env.production
 .env*.local
 dist/
-build/
+
 coverage/
 .DS_Store
 *.log
