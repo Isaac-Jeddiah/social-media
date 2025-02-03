@@ -2,13 +2,13 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { app, server } from "./lib/socket.js";
+import { app,server } from "./lib/socket.js";
 import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import postRoutes from "./routes/post.route.js";
 import storyRoutes from "./routes/story.route.js";
-
+//const app=express();
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -40,4 +40,4 @@ if (process.env.NODE_ENV !== 'production') {
 // ... (rest of the code remains the same)
 
 // Export the Express.js app as a serverless function
-module.exports = app;
+export default app;
