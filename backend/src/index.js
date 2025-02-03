@@ -62,18 +62,16 @@ import messageRoutes from "./routes/message.route.js";
 import postRoutes from "./routes/post.route.js";
 import storyRoutes from "./routes/story.route.js";
 
-dotenv.config();
-
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(cors({
-  origin: [process.env.FRONTEND_URL,"https://kalakapu.vercel.app"],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-  exposedHeaders: ['Set-Cookie']
+  origin:process.env.FRONTEND_URL,
+  // credentials: true,
+  // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  // allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
+  // exposedHeaders: ['Set-Cookie']
 }));
 
 app.use(cookieParser());
