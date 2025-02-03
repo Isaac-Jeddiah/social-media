@@ -1,6 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from "cors";
+const cors = require("cors");
 import cookieParser from "cookie-parser";
 import { app,server } from "./lib/socket.js";
 import { connectDB } from "./lib/db.js";
