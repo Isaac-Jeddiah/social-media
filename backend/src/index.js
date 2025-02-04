@@ -1,14 +1,14 @@
 import express from "express";
 import dotenv from "dotenv";
-const cors = require("cors");
+import cors from "cors";
 import cookieParser from "cookie-parser";
-import { server } from "./lib/socket.js";
+import { server,app } from "./lib/socket.js";
 import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import postRoutes from "./routes/post.route.js";
 import storyRoutes from "./routes/story.route.js";
-const app=express();
+//const app=express();
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -31,7 +31,7 @@ app.use("/api/stories", storyRoutes);
 connectDB();
 
 if (process.env.NODE_ENV !== 'production') {
-  server.listen(5001, () => {
+  server.listen(5002, () => {
     console.log('Server running on port 5001');
   });
 }
