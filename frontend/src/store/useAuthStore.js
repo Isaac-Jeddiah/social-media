@@ -51,14 +51,16 @@ export const useAuthStore = create((set, get) => ({
     set({ isLoggingIn: true });
     try {
       const res = await axiosInstance.post("/auth/login", data);
-      localStorage.setItem('token', res.data.token); // Store the token in local storage
-
-      set({ authUser: res.data });
-      toast.success("Logged in successfully");
-
-      get().connectSocket();
+      if (res.data && res.data.token) {
+        localStorage.setItem('token', res.data.token); // Store the token in local storage
+        set({ authUser: res.data });
+        toast.success("Logged in successfully");
+        get().connectSocket();
+      } else {
+        throw new Error("Login failed: No token received");
+      }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       set({ isLoggingIn: false });
     }
