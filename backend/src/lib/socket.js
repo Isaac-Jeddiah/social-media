@@ -7,8 +7,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL ,
-    methods:['GET','POST'],
+    origin: ["http://localhost:5173"],
   },
 });
 
@@ -35,4 +34,4 @@ io.on("connection", (socket) => {
   });
 });
 
-export { io, app,server };
+export { io, app, server };

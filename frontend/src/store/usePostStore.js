@@ -7,13 +7,7 @@ export const usePostStore = create((set, get) => ({
   isLoading: false,
   createPost: async (data) => {
     try {
-      const token = localStorage.getItem('token'); // Retrieve the token
-      const res = await axiosInstance.post("/posts/create", data, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request headers
-        },
-      });
-
+      const res = await axiosInstance.post("/posts/create", data);
       if (res.data) {
         set({ posts: [res.data, ...get().posts] });
         toast.success("Post created successfully");
