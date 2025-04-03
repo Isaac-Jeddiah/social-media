@@ -29,7 +29,7 @@ const HomePage = () => {
       </div>
       <div className="max-w-2xl mx-auto py-8 px-4">
         
-          <div className="max-w-2xl mx-auto space-y-6">
+          <div className="max-w-2xl mx-auto space-y-6" style={{ marginTop: "8rem" }}>
           <CreatePost />
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
