@@ -4,9 +4,10 @@ import bcrypt from "bcryptjs";
 import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
-  const { fullName, email, password } = req.body;
+  const { fullName, username, email, password } = req.body;
+
   try {
-    if (!fullName || !email || !password) {
+    if (!fullName || !username || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -15,7 +16,6 @@ export const signup = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-
     if (user) return res.status(400).json({ message: "Email already exists" });
 
     const salt = await bcrypt.genSalt(10);
@@ -23,18 +23,19 @@ export const signup = async (req, res) => {
 
     const newUser = new User({
       fullName,
+      username, // ✅ required to avoid null insert
       email,
       password: hashedPassword,
     });
 
     if (newUser) {
-      // generate jwt token here
       generateToken(newUser._id, res);
       await newUser.save();
 
       res.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
+        username: newUser.username,
         email: newUser.email,
         profilePic: newUser.profilePic,
       });
@@ -46,6 +47,7 @@ export const signup = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
